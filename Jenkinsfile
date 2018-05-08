@@ -5,7 +5,7 @@ node {
         checkout scm
     }
 
-    def versions = ["9.4", "9.5", "9.6"]
+    def versions = ["9.4", "9.5", "9.6", "10"]
     def stepsForParallel = [:]
 
     for (int i =0; i < versions.size(); i++) {
