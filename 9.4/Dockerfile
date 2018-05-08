@@ -56,8 +56,6 @@ RUN set -ex; \
 ENV PG_MAJOR 9.4
 ENV PG_VERSION 9.4.17-1.pgdg90+1
 
-RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' $PG_MAJOR > /etc/apt/sources.list.d/pgdg.list
-
 RUN set -ex; \
 	\
 	dpkgArch="$(dpkg --print-architecture)"; \
