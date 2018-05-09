@@ -111,6 +111,7 @@ RUN set -ex; \
 	apt-get install -y \
 		"postgresql-$PG_MAJOR=$PG_VERSION" \
 		"postgresql-contrib-$PG_MAJOR=$PG_VERSION" \
+		"postgresql-$PG_MAJOR-hll" \
 	; \
 	\
 	rm -rf /var/lib/apt/lists/*; \
