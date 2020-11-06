@@ -1,0 +1,13 @@
+#
+# PlanGrid CODEOWNERS
+# For more information, see Hera and GitHub documentation:
+#    http://docs.planfront.net/docs/hera/en/latest/configuration.html
+#    https://help.github.com/articles/about-codeowners/
+#
+# Infrastructure
+#
+#  Slack: #acs-infra-workflows-and-systems
+#
+#  JIRA: RELOPS
+
+* @plangrid/acs-infra-workflows-and-systems
