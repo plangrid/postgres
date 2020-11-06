@@ -54,7 +54,7 @@ RUN set -ex; \
 	apt-key list
 
 ENV PG_MAJOR 10
-ENV PG_VERSION 10.12
+ENV PG_VERSION 10.3-1.pgdg90+1
 
 RUN set -ex; \
 	\
@@ -79,7 +79,7 @@ RUN set -ex; \
 			apt-get update; \
 			apt-get build-dep -y \
 				postgresql-common pgdg-keyring \
-				"postgresql-$PG_MAJOR=$PG_VERSION*" \
+				"postgresql-$PG_MAJOR=$PG_VERSION" \
 			; \
 			DEB_BUILD_OPTIONS="nocheck parallel=$(nproc)" \
 				apt-get source --compile \
@@ -109,8 +109,7 @@ RUN set -ex; \
 	apt-get install -y postgresql-common; \
 	sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf; \
 	apt-get install -y \
-		"postgresql-$PG_MAJOR=$PG_VERSION*" \
-		"postgresql-$PG_MAJOR-hll" \
+		"postgresql-$PG_MAJOR=$PG_VERSION" \
 	; \
 	\
 	rm -rf /var/lib/apt/lists/*; \
@@ -124,14 +123,14 @@ RUN set -ex; \
 # make the sample config easier to munge (and "correct by default")
 RUN mv -v "/usr/share/postgresql/$PG_MAJOR/postgresql.conf.sample" /usr/share/postgresql/ \
 	&& ln -sv ../postgresql.conf.sample "/usr/share/postgresql/$PG_MAJOR/" \
-	&& sed -ri "s!^#?(listen_addresses)\s*=\s*\S+.*!\1 = '*'!" /usr/share/postgresql/postgresql.conf.sample \
-    && sed -ri "s!^#?(lc_.*)\s*=\s'C'!\1 = 'en_US.UTF-8'!" /usr/share/postgresql/postgresql.conf.sample
+	&& sed -ri "s!^#?(listen_addresses)\s*=\s*\S+.*!\1 = '*'!" /usr/share/postgresql/postgresql.conf.sample
 
 RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql
 
 ENV PATH $PATH:/usr/lib/postgresql/$PG_MAJOR/bin
 ENV PGDATA /var/lib/postgresql/data
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA" # this 777 will be replaced by 700 at runtime (allows semi-arbitrary "--user" values)
+VOLUME /var/lib/postgresql/data
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
