@@ -149,9 +149,12 @@ RUN set -ex; \
 	\
 	apt-get install -y --no-install-recommends postgresql-common; \
 	sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf; \
+	\
+# Autodesk/PlanGrid: Install HLL extension
 	apt-get install -y --no-install-recommends \
 		"postgresql-$PG_MAJOR=$PG_VERSION" \
 		"postgresql-contrib-$PG_MAJOR=$PG_VERSION" \
+		"postgresql-$PG_MAJOR-hll" \
 	; \
 	\
 	rm -rf /var/lib/apt/lists/*; \
@@ -179,7 +182,8 @@ ENV PATH $PATH:/usr/lib/postgresql/$PG_MAJOR/bin
 ENV PGDATA /var/lib/postgresql/data
 # this 777 will be replaced by 700 at runtime (allows semi-arbitrary "--user" values)
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
-VOLUME /var/lib/postgresql/data
+# Autodesk/PlanGrid: DEVOPS-620: Intentionally removing volume
+#VOLUME /var/lib/postgresql/data
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat

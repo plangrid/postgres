@@ -1,4 +1,56 @@
-# https://github.com/docker-library/postgres
+# <https://github.com/plangrid/postgres>
+
+## PlanGrid Postgres Fork
+This repo has been forked from [docker-library/postgres](https://github.com/docker-library/postgres) and customized for the ADSK / PlanGrid usage.
+
+Notable changes include:
+
+* Debian files
+  * Installation of the [HyperLogLog (HLL) extension](https://github.com/citusdata/postgresql-hll) as required by plangrid-insights.
+  * Removal of volume for data as this does not get cleaned up when the container is torn down (see PlanGrid: DEVOPS-620).
+* Note: Alpine files have not been updated.
+* Removal of `./github/workflows/` files to prevent unnecessary GitHub CI builds for this fork.
+* Jenkins build file for pushing images to ECR.
+
+### Upstream updates
+
+```zsh
+# Create an update branch
+$ git checkout master
+$ git pull
+$ git checkout -b my_update_branch
+
+# Merge the update branch with the upstream repo
+$ git remote add upstream git@github.com:docker-library/postgres.git
+$ git fetch upstream
+$ git merge upstream/master
+```
+
+### Manual testing
+
+```zsh
+# Build the image
+$ docker build -t plangrid_postgres_12 12/
+
+# Run the image
+$ docker run -dp 15432:5432 -e POSTGRES_PASSWORD=password123 plangrid_postgres_12
+
+# Connect to the database
+$ psql "postgres://postgres:password123@localhost:15432"
+
+-- Verify the version
+postgres=# SELECT version();
+
+-- Verify that the hll extension can be created
+postgres=# CREATE EXTENSION hll;
+
+-- Verify that the Encoding and Collate is en_US.utf8
+postgres=# \l
+```
+
+---
+
+## https://github.com/docker-library/postgres
 
 ## Maintained by: [the PostgreSQL Docker Community](https://github.com/docker-library/postgres)
 
