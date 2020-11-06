@@ -17,9 +17,9 @@ ENV LANG en_US.utf8
 
 RUN mkdir /docker-entrypoint-initdb.d
 
-ENV PG_MAJOR 9.6
-ENV PG_VERSION 9.6.19
-ENV PG_SHA256 61f93a94ccddbe0b2d1afaf03f04ba605d8af5b774ff9b830e5adeb50ab55cb0
+ENV PG_MAJOR 11
+ENV PG_VERSION 11.9
+ENV PG_SHA256 35618aa72e0372091f923c42389c6febd07513157b4fbb9408371706afbb6635
 
 RUN set -eux; \
 	\
@@ -46,6 +46,7 @@ RUN set -eux; \
 		libxml2-dev \
 		libxslt-dev \
 		linux-headers \
+		llvm10-dev clang g++ \
 		make \
 #		openldap-dev \
 		openssl-dev \
@@ -59,6 +60,7 @@ RUN set -eux; \
 #		tcl-dev \
 		util-linux-dev \
 		zlib-dev \
+		icu-dev \
 	; \
 	\
 	cd /usr/src/postgresql; \
@@ -102,6 +104,8 @@ RUN set -eux; \
 		--with-openssl \
 		--with-libxml \
 		--with-libxslt \
+		--with-icu \
+		--with-llvm \
 	; \
 	make -j "$(nproc)" world; \
 	make install-world; \

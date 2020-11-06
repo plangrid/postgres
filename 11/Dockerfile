@@ -82,8 +82,8 @@ RUN set -ex; \
 	rm -rf "$GNUPGHOME"; \
 	apt-key list
 
-ENV PG_MAJOR 9.5
-ENV PG_VERSION 9.5.23-1.pgdg90+1
+ENV PG_MAJOR 11
+ENV PG_VERSION 11.9-1.pgdg90+1
 
 RUN set -ex; \
 	\
@@ -151,7 +151,6 @@ RUN set -ex; \
 	sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf; \
 	apt-get install -y --no-install-recommends \
 		"postgresql-$PG_MAJOR=$PG_VERSION" \
-		"postgresql-contrib-$PG_MAJOR=$PG_VERSION" \
 	; \
 	\
 	rm -rf /var/lib/apt/lists/*; \
