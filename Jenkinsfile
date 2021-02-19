@@ -17,6 +17,7 @@ node {
                 sh "docker build -t '723151894364.dkr.ecr.us-east-1.amazonaws.com/postgres${ver}' ${version}/"
                 if (env.BRANCH_NAME == 'master') {
                     sh "docker push 723151894364.dkr.ecr.us-east-1.amazonaws.com/postgres${ver}:latest"
+                    sh "docker push autodesk-docker.art-bobcat.autodesk.com/postgres${ver}:latest"
                 }
             }
         }
